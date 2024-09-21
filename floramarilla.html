@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lunita garden</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .garden {
+            width: 100vw;
+            height: 100vh;
+            background-image: url('IMG_4600.jpg'); 
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .titulo {
+            position: absolute;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 2rem;
+            top: 5vh;
+            left: 40vw;
+            text-align: center;
+            color: yellow;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .texto {
+            position: absolute;
+            width: 50vw;
+            font-family:'Times New Roman', Times, serif;
+            font-size: 1.1rem;
+            top: 15vh;
+            left: 30vw;
+            text-align: center;
+            color: black;
+        }
+
+        .click-area {
+            position: absolute;
+            width: 16.66vw; 
+            height: 20vh;
+            cursor: pointer;
+        }
+
+        /* Posicionamos las zonas clickeables */
+        .area1, .area2, .area3 {
+            top: 65vh;
+        }
+
+        .area4, .area5, .area6 {
+            top: 80vh;
+        }
+
+        /* Ajustamos las posiciones horizontales */
+        .area1 { left: 40vw; }
+        .area2 { left: 60vw; }
+        .area3 { left: 80vw; }
+
+        .area4 { left: 30vw; }
+        .area5 { left: 50vw; }
+        .area6 { left: 70vw; }
+
+        /* Estilo de las flores PNG (girasoles) */
+        .flower {
+            position: absolute;
+            display: none;
+            cursor: pointer;
+            animation: grow 2s ease-out forwards;
+            width: 5vw;
+            height: 10vh;
+        }
+
+        /* Animación de crecimiento */
+        @keyframes grow {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        /* Mensajes justo encima de cada flor */
+        .message {
+            display: none;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            font-size: 1rem;
+        }
+
+
+        .big-flower {
+            position: absolute;
+            display: none;
+            cursor: pointer;
+            animation: grow 2s ease-out forwards;
+            width: 7vw;
+            height: auto;
+        }
+
+        .big-flower.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="garden">
+
+    <div class="inicio">
+        <div class="titulo"><b>Feliz 21 de Setiembre lunita!</b></div>
+        <div class="texto">
+            Eres la mejor amiga del mundo y por ello en este día, esa niña se merece recibir unas flores amarillas muy bonitas.<br> 
+            Por ello su rayito ha creado un jardín solo para ella, en donde tienes que descubrir los girasoles y tienes que ser curiosa
+            porque hay una sorpresa al final. :)
+        </div>
+    </div>
+
+    <!-- Zonas clickeables invisibles -->
+    <div class="click-area area1" data-index="0"></div>
+    <div class="click-area area2" data-index="1"></div>
+    <div class="click-area area3" data-index="2"></div>
+    <div class="click-area area4" data-index="3"></div>
+    <div class="click-area area5" data-index="4"></div>
+    <div class="click-area area6" data-index="5"></div>
+
+    <!-- Flores PNG -->
+    <img src="girasol.png" class="flower" id="flower1" alt="Flor 1">
+    <img src="girasol.png" class="flower" id="flower2" alt="Flor 2">
+    <img src="girasol.png" class="flower" id="flower3" alt="Flor 3">
+    <img src="girasol.png" class="flower" id="flower4" alt="Flor 4">
+    <img src="girasol.png" class="flower" id="flower5" alt="Flor 5">
+    <img src="girasol.png" class="flower" id="flower6" alt="Flor 6">
+
+    <!-- Flor grande final -->
+    <img src="girasol.png" class="big-flower" id="big-flower" alt="Flor Grande">
+
+    <!-- Contenedor de mensajes-->
+    <div class="message" id="message1">J&J producciones 4ever</div>
+    <div class="message" id="message2">Gracias por ser mis 10 centimos</div>
+    <div class="message" id="message3">La mejor cientifica</div>
+    <div class="message" id="message4">Estoy orgulloso de ti!</div>
+    <div class="message" id="message5">Eres la luna que alumbra mi cielo :)</div>
+    <div class="message" id="message6">Viviremos miles de aventuras!</div>
+    
+</div>
+
+<script>
+
+    var flowersCount = 0;
+    const areas = document.querySelectorAll('.click-area');
+    const flowers = document.querySelectorAll('.flower');
+    const messages = document.querySelectorAll('.message');
+
+    areas.forEach((area, index) => {
+        area.addEventListener('click', () => {
+            const flower = document.getElementById(`flower${index + 1}`);
+            const message = document.getElementById(`message${index + 1}`);
+            
+            flower.style.display = 'block';
+
+            // Calcular posición de la flor en unidades responsivas
+            const flowerTop = (area.offsetTop / window.innerHeight) * 100;
+            const flowerLeft = (area.offsetLeft / window.innerWidth) * 100;
+
+            // Aplicar las posiciones en 'vh' y 'vw'
+            flower.style.top = `${flowerTop}vh`;
+            flower.style.left = `${flowerLeft}vw`;
+
+            // Agregar el mensaje al hacer clic en la flor
+            flower.addEventListener('click', () => {
+                if (!flower.classList.contains('clicked')) {
+                    // Posicionar mensaje justo encima de la flor
+                    message.style.top = `${flowerTop - 5}vh`;  // Mensaje 10vh encima de la flor
+                    message.style.left = `${flowerLeft}vw`;
+                    message.style.display = 'block';  // Mostrar mensaje
+                    flower.classList.add('clicked');
+                    flowersCount++;
+                }
+
+                if (flowersCount == 6) {
+                    const bigFlower= document.getElementById('big-flower')
+                    bigFlower.style.top= '40vh'
+                    bigFlower.style.left= '50vw'
+                    bigFlower.classList.add('active');
+                }
+            });
+
+            // Desactivar el área una vez que se ha hecho clic
+            area.style.pointerEvents = 'none';
+
+        });
+    });
+
+    const bigFlower = document.getElementById('big-flower');
+    bigFlower.addEventListener('click', () => {
+        window.location.href = 'https://www.youtube.com/watch?v=UNlveNAEu_E&t=2s'; 
+    });
+</script>
+
+</body>
+</html>
